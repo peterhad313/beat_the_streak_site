@@ -43,11 +43,19 @@ The Problem</h3>
     <li>Gametime temperature (research says that warmer weather is better for hitters)</li>
   </ul>
   When chooising a learner, we were limited by what type of output we needed. In order to choose the hitters most likely to suceed, we needed to output a percentage probability of sucess. The most common type of this is logistical regression. 
-  OTHER IDEAS GO HERE
 </p>
+<p>However, this did not give us the results that we wannted. INSERT RESULT. Because of this, we looked for other options. One of the most intresting ideas for this was a CostSensitiveClassifier. With this, we can create a classifier that is focused on avoiding false positives. By switching to a cost sensative approach, we were able to increase the recall rate for a J48 tree from 59% to 71%. </p>
+<div style="align: left; text-align:center;">
+    <img src="flowchart.jpg">
+    <div style="text-align: center">Figure 1: Full Algorithim</div>
+</div>
+
+<p>While this was better, it still was not good enough. To improve this further, we decided to try and combine these two approaches. We created a python script that took a J48 tree from Weka and converted it into a python set of nested if statements. We used this to find the best several players. To choose the best out of this group, we ranked them using the coefficients from a Weka Bayesian logistic regression. The top players from this were predictions</p>
+
 
 <h3>Training and Testing</h3>
-<p></p>
+<p>To train our models, we gathered our data from several sources, primarily Retrosheet, baseball-refrence.com and ESPN. We used the 2009 to 2012 season for training and the 2013 season for testing. Some of the stats were just averages, such as batting average and WHIP. Others were calculated from game data, such as batting hot streaks, hitter plate apperances per game and plate apearances per game. We then ued excel to merge the various csv files into one file with all our data. Finally, we used a python script to convert this into a .arff file readable by Weka.</p>
+<p> To test our final algrorithim, we created a python script that acted as if it was playing the game. For every day, it take all possible players and run it through our algorithim. It would then check if its prediction was correct. It keeps track of its current streak, as well as the longest streak it got over the season, as well as our prediction percentage.</p>
 
 <h3>Results</h3>
 
