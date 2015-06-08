@@ -13,8 +13,8 @@
     <section class="page-header">
       <h1 class="project-name">Beat the Streak</h1>
       <h2 class="project-tagline">A Northwestern Univeristy Machine Learning Project</h2>
-      <a href="https://github.com/peterhad313/beat_the_streak_site" class="btn">View on GitHub</a>
-      <a href="https://github.com/peterhad313/beat_the_streak_site/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/bpeynetti/Beat_the_streak" class="btn">View on GitHub</a>
+      <a href="https://github.com/bpeynetti/Beat_the_streak/zipball/master" class="btn">Download .zip</a>
       
     </section>
 
@@ -55,9 +55,24 @@ The Problem</h3>
 
 <h3>Training and Testing</h3>
 <p>To train our models, we gathered our data from several sources, primarily Retrosheet, baseball-refrence.com and ESPN. We used the 2009 to 2012 season for training and the 2013 season for testing. Some of the stats were just averages, such as batting average and WHIP. Others were calculated from game data, such as batting hot streaks, hitter plate apperances per game and plate apearances per game. We then ued excel to merge the various csv files into one file with all our data. Finally, we used a python script to convert this into a .arff file readable by Weka.</p>
-<p> To test our final algrorithim, we created a python script that acted as if it was playing the game. For every day, it take all possible players and run it through our algorithim. It would then check if its prediction was correct. It keeps track of its current streak, as well as the longest streak it got over the season, as well as our prediction percentage.</p>
+<p> To test our final algrorithim, we created a python script that acted as if it was playing the game. For every day, it take all possible players and run it through our algorithim. It would then check if its prediction was correct. It keeps track of its current streak, as well as the longest streak it got over the season, as well as our prediction percentage. If we always chose the best player, we would only have one possible test set which will always have a 10 game streak. To get a better idea of how well we were choosing the best players, we chose randomly from the top 5 players. </p>
 
 <h3>Results</h3>
+<p>Baseball is a very unpredictable and our results showed that. For evaluation metrics, we decided to use the Recall Rate of the algorithim and the average max streak achieved during a season. What we found was our combination of algorithims beformed better than either algorithim independently. While 1.6% may seem insignificant, it doubles the chance of winning, although the chances are still very low. While we are dissapointed that we are not close to winning, the game has been played for millions of people over many years and no one has reached a streak of 50 yet.</p>
+
+
+<table class="myTable">
+<tr>
+<th></th><th>J48 Tree</th><th>Logistical Regression</th><th>Combination</th>
+</tr>
+<tr>
+<th> Recall Rate</th><td>70.8%</td><td>67.3%</td><td>72.4%</td>
+</tr>
+<tr>
+<th>Average Max Streak</th><td>12.48</td><td>12.6</td><td>13.1</td>
+</tr>
+</table>
+
 
 <h2 class="project-tagline"> Contact Information</h2>
 <p>Peter Haddad: peterhaddad2016@u.northwestern.edu</p>
@@ -65,3 +80,8 @@ The Problem</h3>
 <p>Bruno Peynetti:</p>
 </html>
 
+<style type="text/css">
+.myTable { width:200px;background-color:#eee;border-collapse:collapse; }
+.myTable th { background-color:#000;color:white;width:10%; }
+.myTable td, .myTable th { padding:5px;border:1px solid #000; text-align: center}
+</style>
