@@ -1,87 +1,100 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Beat the streak site by peterhad313</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Beat the Streak</h1>
-      <h2 class="project-tagline">A Northwestern Univeristy Machine Learning Project</h2>
-      <a href="https://github.com/bpeynetti/Beat_the_streak" class="btn">View on GitHub</a>
-      <a href="https://github.com/bpeynetti/Beat_the_streak/zipball/master" class="btn">Download .zip</a>
-      
-    </section>
+<head>
+  <meta charset="UTF-8">
+  <title>Beat the streak site by peterhad313</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+  <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+</head>
+<body>
+  <section class="page-header">
+    <h1 class="project-name">Beat the Streak</h1>
+    <h2 class="project-tagline">A Northwestern Univeristy Machine Learning Project</h2>
+    <a href="https://github.com/bpeynetti/Beat_the_streak" class="btn">View on GitHub</a>
+    <a href="https://github.com/bpeynetti/Beat_the_streak/zipball/master" class="btn">Download .zip</a>
 
-    <section class="main-content">
+  </section>
 
-<h3>
-The Problem</h3>
+  <section class="main-content">
 
-<p>Our task is to create a machine learning model that can predict which Major League Baseball player is most likely to get a hit in a day. We aim to use statistics from recent games as well as previous seasons to accomplish this. The output will be the likelihood of a hit for each batter on a given day against a given pitcher. We chose this task beause there is a fantasy game on MLB.com where if you can predict a hit for 57 days in a row, you will win $5.6 million. Our goal is to make a system where we can input the current day's games and matchups and we can predict which player is most likely to get a hit.
-</p>
+    <h3>
+      The Problem</h3>
 
-<h3>Our Solution</h3>
+      <p>
+        Our task is to create a machine learning model that can predict which Major League Baseball player is most likely to get a hit in a day. We aim to use statistics from recent games as well as previous seasons to accomplish this. The output will be the likelihood of a hit for each batter on a given day against a given pitcher. We chose this task because there is a fantasy game on MLB.com where if you can predict a hit for 57 days in a row, you will win $5.6 million. Our goal is to make a system where we can input the current day's games and matchups and we can predict which player is most likely to get a hit.      </p>
 
-<p>
-  When we started, we had many different ideas for possible features. To narrow it down, we tested most of the ideas. After many iterations, we narrowed it down to the following list:
-    <ul>
-    <li>Hitter season batting average</li>
-    <li>Hitter batting average in last 20 plate appearances (indicator of hot/cold streak)</li>
-    <li>Hitter plate appearances per game (full season)</li>
-    <li>Home/away</li>
-    <li>Ballpark factor (an adjustment for the hitter-friendliness of the ballpark)</li>
-    <li>Opposing pitcher season ERA</li>
-    <li>Opposing pitcher ERA in last two starts (indicator of hot/cold streak)</li>
-    <li>Opposing pitcher season FIP (fielder-independent pitching)</li>
-    <li>Opposing pitcher season Batting average against (BAA)</li>
-    <li>Gametime temperature (research says that warmer weather is better for hitters)</li>
-  </ul>
-  When chooising a learner, we were limited by what type of output we needed. In order to choose the hitters most likely to suceed, we needed to output a percentage probability of sucess. The most common type of this is logistical regression. 
-</p>
-<p>However, this did not give us the results that we wannted. INSERT RESULT. Because of this, we looked for other options. One of the most intresting ideas for this was a CostSensitiveClassifier. With this, we can create a classifier that is focused on avoiding false positives. By switching to a cost sensative approach, we were able to increase the recall rate for a J48 tree from 59% to 71%. </p>
-<div style="align: left; text-align:center;">
-    <img src="flowchart.jpg">
-    <div style="text-align: center">Figure 1: Full Algorithim</div>
-</div>
+      <h3>Our Solution</h3>
 
-<p>While this was better, it still was not good enough. To improve this further, we decided to try and combine these two approaches. We created a python script that took a J48 tree from Weka and converted it into a python set of nested if statements. We used this to find the best several players. To choose the best out of this group, we ranked them using the coefficients from a Weka Bayesian logistic regression. The top players from this were predictions</p>
+      <p>
+        When we started, we had many different ideas for possible features. To narrow it down, we tested most of the ideas. After many iterations, we narrowed it down to the following list:
+        <ul>
+          <li>Hitter batting average for the current season</li>
+          <li>Hitter batting average in last 20 plate appearances (indicator of hot/cold streak)</li>
+          <li>Hitter batting average in last 50 plate appearances (indicator of longer-run hot/cold streak)</li>
+          <li>Hitter plate appearances per game (full season)</li>
+          <li>Home/away</li>
+          <li>Ballpark factor (an adjustment for the hitter-friendliness of the ballpark)</li>
+          <li>Opposing pitcher season ERA for the current season</li>
+          <li>Gametime temperature (research says that warmer weather is better for hitters)</li>
+          <li>Games with at least one hit ratio (calculated as the proportion of games in which a batter got at least one hit in all four years in the training set)</li>
+        </ul>
+        When choosing a learner, we were limited by what type of output we needed. In order to choose the hitters most likely to succeed, we needed to output a percentage probability of success. The main algorithm that outputs this is a logistical regression. When we tested this, we got a recall rate of 67%. This was not good enough so we looked for other options. One of the most interesting ideas for this was a CostSensitiveClassifier. With this, we can create a classifier that is focused on avoiding false positives. By switching to a cost sensitive approach, we were able to increase the recall rate of a J48 tree from 59% to 71%.
+      </p>
 
+      <div style="align: left; text-align:center;">
+        <img src="flowchart.jpg">
+        <div style="text-align: center">Figure 1: Full Algorithm</div>
+      </div>
 
-<h3>Training and Testing</h3>
-<p>To train our models, we gathered our data from several sources, primarily Retrosheet, baseball-refrence.com and ESPN. We used the 2009 to 2012 season for training and the 2013 season for testing. Some of the stats were just averages, such as batting average and WHIP. Others were calculated from game data, such as batting hot streaks, hitter plate apperances per game and plate apearances per game. We then ued excel to merge the various csv files into one file with all our data. Finally, we used a python script to convert this into a .arff file readable by Weka.</p>
-<p> To test our final algrorithim, we created a python script that acted as if it was playing the game. For every day, it take all possible players and run it through our algorithim. It would then check if its prediction was correct. It keeps track of its current streak, as well as the longest streak it got over the season, as well as our prediction percentage. If we always chose the best player, we would only have one possible test set which will always have a 10 game streak. To get a better idea of how well we were choosing the best players, we chose randomly from the top 5 players. </p>
-
-<h3>Results</h3>
-<p>Baseball is a very unpredictable and our results showed that. For evaluation metrics, we decided to use the Recall Rate of the algorithim and the average max streak achieved during a season. What we found was our combination of algorithims beformed better than either algorithim independently. While 1.6% may seem insignificant, it doubles the chance of winning, although the chances are still very low. While we are dissapointed that we are not close to winning, the game has been played for millions of people over many years and no one has reached a streak of 50 yet.</p>
+      <p>
+        While this was better, it still was not good enough. To improve this further, we decided to try and combine these two approaches. We created a python script that took a J48 tree from Weka and converted it into a python set of nested if statements. We used this to find the best several players. To choose the best out of this group, we ran them through a Weka Bayesian logistic regression. We used the top players from this for our final predictions
+      </p>
 
 
-<table class="myTable">
-<tr>
-<th></th><th>J48 Tree</th><th>Logistical Regression</th><th>Combination</th>
-</tr>
-<tr>
-<th> Recall Rate</th><td>70.8%</td><td>67.3%</td><td>72.4%</td>
-</tr>
-<tr>
-<th>Average Max Streak</th><td>12.48</td><td>12.6</td><td>13.1</td>
-</tr>
-</table>
+      <h3>Training and Testing</h3>
+      <p>
+        To train our models, we gathered our data from several sources, primarily Retrosheet, baseball-refrence.com and ESPN. We used the 2009 to 2012 season for training and the 2013 season for testing. Some of the stats were just averages, such as batting average and WHIP. Others were calculated from game data, such as batting hot streaks, hitter plate appearances per game and plate appearances per game. We then used excel to merge the various csv files into one file with all our data. Finally, we used a python script to convert this into an .arff file readable by Weka.
+      </p>
+
+      <p> 
+        To test our final algorithm, we created a python script that acted as if it was playing the game. For every day, it take all possible players and runs it through our algorithm. It would then check if its prediction was correct. It keeps track of its current streak, as well as the longest streak it got over the season, as well as our prediction percentage. If we always chose the best player, we would only have one possible test set which will always have a 10 game streak. To get a better idea of how well we were choosing the best players, we chose randomly from the top 5 players. 
+      </p>
+
+      <h3>Results</h3>
+
+      <p>
+        Baseball is a very unpredictable and our results showed that. For evaluation metrics, we decided to use the Recall Rate of the algorithm and the average max streak achieved during a season. What we found was our combination of algorithms performed better than either algorithm independently. While 1.6% may seem insignificant, it doubles the chance of winning, although the chances are still very low. While we are disappointed that we are not close to winning, the game has been played for millions of people over many years and no one has reached a streak of 50 yet.
+      </p>
 
 
-<h2 class="project-tagline"> Contact Information</h2>
-<p>Peter Haddad: peterhaddad2016@u.northwestern.edu</p>
-<p>Jake Kobza: </p>
-<p>Bruno Peynetti:</p>
-</html>
+      <table class="myTable">
+        <tr>
+          <th></th><th>J48 Tree</th><th>Logistical Regression</th><th>Combination</th>
+        </tr>
+        <tr>
+          <th> Recall Rate</th><td>70.8%</td><td>67.3%</td><td>72.4%</td>
+        </tr>
+        <tr>
+          <th>Average Max Streak</th><td>12.48</td><td>12.6</td><td>13.1</td>
+        </tr>
+      </table>
 
-<style type="text/css">
-.myTable { width:200px;background-color:#eee;border-collapse:collapse; }
-.myTable th { background-color:#000;color:white;width:10%; }
-.myTable td, .myTable th { padding:5px;border:1px solid #000; text-align: center}
-</style>
+      <p>
+        The most important thing to take from this table is that the combination of techniques is more effective than either individually. This is because this method is able to combine cost sensitive tree to remove a lot of false positives, which makes the ranking from the logistical regression more accurate.
+      </p>
+
+
+      <h2 class="project-tagline"> Contact Information</h2>
+      <p>Peter Haddad: peterhaddad2016@u.northwestern.edu</p>
+      <p>Jake Kobza: </p>
+      <p>Bruno Peynetti:</p>
+      </html>
+
+      <style type="text/css">
+        .myTable { width:200px;background-color:#eee;border-collapse:collapse; }
+        .myTable th { background-color:#000;color:white;width:10%; }
+        .myTable td, .myTable th { padding:5px;border:1px solid #000; text-align: center}
+      </style>
